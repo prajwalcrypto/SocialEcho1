@@ -6,8 +6,12 @@ const JwtStrategy = require("passport-jwt").Strategy,
 const passport = require("passport");
 const opts = {};
 const jwt = require("jsonwebtoken");
+
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
+
+console.log("SECRET:", process.env.SECRET);
+console.log("REFRESH_SECRET:", process.env.REFRESH_SECRET);
 
 passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
@@ -52,6 +56,7 @@ passport.use(
         return done(null, false);
       }
     } catch (err) {
+      console.error("Error in JWT Strategy:", err);
       return done(err, false);
     }
   })
